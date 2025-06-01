@@ -19,15 +19,30 @@ uploaded_file = st.file_uploader("Upload file CSV", type="csv")
 if uploaded_file:
     df = pd.read_csv(uploaded_file)
 
-    # Mapping kategori ke angka, sesuaikan dengan datasetmu
     sports_map = {'No Sports': 0, '1-3 times': 1, '4-6 times': 2, '7+ times': 3}
     sleep_map = {'2-4 hrs': 0, '4-6 hrs': 1, '7-8 hrs': 2}
     df['sports'] = df['sports_engagement'].map(sports_map)
     df['avg_sleep'] = df['average_sleep'].map(sleep_map)
 
     features = ['sports', 'avg_sleep', 'academic_pressure', 'depression', 'anxiety', 'future_insecurity', 'social_relationships']
-    df = df.dropna(subset=features + ['stress_level'])  # pastikan tidak ada NaN
 
+    df['stress_score'] = df[features].sum(axis=1)
+
+    def categorize_stress(score):
+        if score <= 9:
+            return 'Normal'
+        elif score <= 14:
+            return 'Mild'
+        elif score <= 19:
+            return 'Moderate'
+        elif score <= 24:
+            return 'Severe'
+        else:
+            return 'Extremely Severe'df['stress_level'] = df['stress_score'].apply(categorize_stress)
+    df['stress_level'] = df['stress_level'].replace({'Normal': 'Mild', 'Extremely Severe': 'Severe'})
+
+    df = df.dropna(subset=features + ['stress_level'])
+    
     X = df[features]
     y = df['stress_level']
 
