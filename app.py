@@ -26,7 +26,7 @@ if uploaded_file:
 
     features = ['sports', 'avg_sleep', 'academic_pressure', 'depression', 'anxiety', 'future_insecurity', 'social_relationships']
 
-    df['stress'] = df[features].sum(axis=1)
+    df['stress_score'] = df[features].sum(axis=1)
 
     def categorize_stress(score):
         if score <= 9:
@@ -38,7 +38,9 @@ if uploaded_file:
         elif score <= 24:
             return 'Severe'
         else:
-            return 'Extremely Severe'df['stress_level'] = df['stress_score'].apply(categorize_stress)
+            return 'Extremely Severe'
+            
+    df['stress_level'] = df['stress_score'].apply(categorize_stress)
     df['stress_level'] = df['stress_level'].replace({'Normal': 'Mild', 'Extremely Severe': 'Severe'})
 
     df = df.dropna(subset=features + ['stress_level'])
