@@ -26,7 +26,7 @@ if uploaded_file:
 
     features = ['sports', 'avg_sleep', 'academic_pressure', 'depression', 'anxiety', 'future_insecurity', 'social_relationships']
 
-    df['stress_score'] = df[features].sum(axis=1)
+    df['stress'] = df[features].sum(axis=1)
 
     def categorize_stress(score):
         if score <= 9:
