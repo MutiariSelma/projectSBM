@@ -41,7 +41,6 @@ if uploaded_file:
             return 'Extremely Severe'
             
     df['stress_level'] = df['stress_score'].apply(categorize_stress)
-    df['stress_level'] = df['stress_level'].replace({'Normal': 'Mild', 'Extremely Severe': 'Severe'})
 
     df = df.dropna(subset=features + ['stress_level'])
     
